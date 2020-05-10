@@ -1,0 +1,6 @@
+数据库配置： host='localhost', port=3306, db='usershow', user='root', passwd='123456', charset='utf8'
+JDK:1.7
+部署：1.导入usershow.sql数据
+      2.把USERSYS.war拷贝到tomcat的webapps目录下，启动tomcat访问下面路径即可
+        或者源码导入到eclipse启动访问
+启动后默认访问路径：http://127.0.0.1:8080/USERSYS/

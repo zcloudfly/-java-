@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="users.sql">
+    
+  
+    <!--新增-->
+    <insert id="insertUsers" parameterType="com.entity.Users">
+        insert into
+        user(ID, SEX, BORNYEAR,TRIPDISTANCE,TRIPTIME)
+        values(#{id}, #{sex}, #{bornYear},#{tripDistance},#{tripTime})
+    </insert>
+   <!--查询Sql-->
+   <select id="getUsersByWhere" parameterType="java.util.Map" resultType="com.entity.Users">
+        select * from user 
+        <where>
+          <if test="id!=null and id!=''">
+            AND ID=#{id}
+          </if>
+          <if test="begin!=null and begin!=''">
+            AND  ${sType}>=#{begin}
+          </if>
+          <if test="end!=null and end!=''">
+            AND #{end}>=${sType}
+          </if>
+        </where>
+        limit #{start},#{length}
+    </select>
+    
+    <!-- <select id="getUsersDataByWhere" parameterType="java.util.Map" resultType="com.entity.Users">
+       select ${sType} ,count(#{sType} ) count from user
+        <where>
+          <if test="id!=null and id!=''">
+            AND ID=#{id}
+          </if>
+         <if test="begin!=null and begin!=''">
+            AND  ${sType}>=#{begin}
+          </if>
+          <if test="end!=null and end!=''">
+            AND #{end}>=${sType}
+          </if>
+        </where>
+        group BY ${sType} 
+    </select> -->
+    <select id="getUsersCountByWhere" parameterType="java.util.Map" resultType="java.lang.Integer">
+       select count(id) count from user
+        <where>
+          <if test="id!=null and id!=''">
+            AND ID=#{id}
+          </if>
+          <if test="begin!=null and begin!=''">
+            AND  ${sType}>=#{begin}
+          </if>
+          <if test="end!=null and end!=''">
+            AND #{end}>=${sType}
+          </if>
+        </where>
+       
+    </select>
+    
+     <select id="getUsersDataByWhere" parameterType="java.util.Map" resultType="com.entity.Users">
+      select nnd as ${sType},count(*) as count from (
+		SELECT case ${sql} else 0  end as nnd FROM user
+		 <where>
+          <if test="begin!=null and begin!=''">
+            AND  ${sType}>=#{begin}
+          </if>
+          <if test="end!=null and end!=''">
+            AND #{end}>=${sType}
+          </if>
+        </where>
+		)a GROUP BY nnd
+    </select>
+    <select id="getColMaxAndMin" parameterType="java.util.Map" resultType="com.entity.UtilEntity">
+       select max(${sType}) max ,min(${sType}) min from user 
+    </select>
+</mapper>
